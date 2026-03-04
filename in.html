@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8 Наурыз Құтты Болсын 💐</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+    font-family:'Segoe UI',sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    background:linear-gradient(135deg,#ffd6e7,#fff0f6);
+    overflow:hidden;
+}
+
+/* Контент */
+.container{
+    position:relative;
+    z-index:2;
+    padding:20px;
+}
+
+h1{
+    font-size:28px;
+    color:#d63384;
+    margin-bottom:15px;
+}
+
+p{
+    font-size:15px;
+    color:#444;
+    line-height:1.6;
+    max-width:500px;
+    margin:10px auto;
+}
+
+.button{
+    margin-top:25px;
+    padding:12px 25px;
+    border:none;
+    border-radius:25px;
+    background:#ff4da6;
+    color:white;
+    font-size:15px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.button:active{
+    transform:scale(0.95);
+}
+
+/* Падающие цветочки */
+.flower{
+    position:fixed;
+    top:-10px;
+    font-size:18px;
+    animation:fall linear forwards;
+    z-index:1;
+}
+
+@keyframes fall{
+    to{
+        transform:translateY(110vh) rotate(360deg);
+        opacity:0;
+    }
+}
+
+/* Двигающееся сердце */
+.heart{
+    position:fixed;
+    font-size:45px;
+    cursor:pointer;
+    z-index:4;
+    transition:left 0.6s ease, top 0.6s ease;
+}
+
+/* Overlay */
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.4);
+    backdrop-filter:blur(4px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    opacity:0;
+    pointer-events:none;
+    transition:0.4s;
+    z-index:5;
+}
+
+.overlay.active{
+    opacity:1;
+    pointer-events:all;
+}
+
+.card{
+    background:white;
+    padding:30px;
+    border-radius:25px;
+    width:85%;
+    max-width:350px;
+    animation:pop 0.4s ease;
+    text-align:center;
+}
+
+@keyframes pop{
+    from{transform:scale(0.7);opacity:0;}
+    to{transform:scale(1);opacity:1;}
+}
+
+.close-btn{
+    margin-top:15px;
+    padding:8px 20px;
+    border:none;
+    border-radius:20px;
+    background:#ff4da6;
+    color:white;
+    cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>Құрметті арулар 💐</h1>
+
+<p>
+Сіздерді 8 Наурыз — Халықаралық әйелдер күнімен шын жүректен құттықтаймыз!  
+Әрқашан жүздеріңізден күлкі кетпесін, армандарыңыз орындалып,  
+өмірлеріңіз тек қуаныш пен бақытқа толы болсын.  
+Біздің топтың көркі болып жүргендеріңіз үшін рахмет ❤️
+</p>
+
+<p>
+Сіздерсіз аудитория да, сабақ та, көңіл-күй де басқаша болар еді 😊  
+Әр күніңіз ерекше, әр сәтіңіз әдемі болсын!
+</p>
+
+<button class="button" onclick="startGame(this)">
+Сюрпризді ашу 🌸
+</button>
+</div>
+
+<div class="overlay" id="overlay">
+<div class="card">
+<h2>✨ Жүрек жаулап алынды! ✨</h2>
+<p>
+Сіз біздің топтың ең жарқын және әдемі аруларының бірісіз 🌸<br>
+Миссияны орындадыңыз, енді тек бір кішкентай тапсырма қалды — сыйлыққа қол жеткізу 😎💖
+</p>
+<button class="close-btn" onclick="closeCard()">Жабу</button>
+</div>
+</div>
+
+<script>
+/* Падающие цветочки */
+function createFlower(){
+    const flower=document.createElement("div");
+    flower.classList.add("flower");
+    flower.innerHTML="🌸";
+    flower.style.left=Math.random()*100+"vw";
+    flower.style.animationDuration=(5+Math.random()*5)+"s";
+    document.body.appendChild(flower);
+    setTimeout(()=>flower.remove(),9000);
+}
+setInterval(createFlower,500);
+
+let heart;
+let moveInterval;
+
+function startGame(btn){
+    btn.style.display="none";
+
+    heart=document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML="❤️";
+    document.body.appendChild(heart);
+
+    moveHeart();
+
+    // сердце быстро двигается каждые 0.7 секунд
+    moveInterval=setInterval(moveHeart,700);
+
+    heart.addEventListener("click",()=>{
+        clearInterval(moveInterval);
+        explodeHearts();
+        document.getElementById("overlay").classList.add("active");
+        heart.remove();
+    });
+}
+
+function moveHeart(){
+    heart.style.left=Math.random()*80+"vw";
+    heart.style.top=Math.random()*80+"vh";
+}
+
+function explodeHearts(){
+    for(let i=0;i<25;i++){
+        const mini=document.createElement("div");
+        mini.innerHTML="💗";
+        mini.style.position="fixed";
+        mini.style.left=heart.style.left;
+        mini.style.top=heart.style.top;
+        mini.style.fontSize="20px";
+        mini.style.transition="1s";
+        document.body.appendChild(mini);
+
+        setTimeout(()=>{
+            mini.style.transform=`translate(${Math.random()*300-150}px,${Math.random()*300-150}px)`;
+            mini.style.opacity="0";
+        },10);
+
+        setTimeout(()=>mini.remove(),1000);
+    }
+}
+
+function closeCard(){
+    document.getElementById("overlay").classList.remove("active");
+}
+</script>
+
+</body>
+</html>
